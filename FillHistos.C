@@ -36,7 +36,6 @@ int FillHistos::MCTruthMatch(int jele){
   }
 }
 
-
 void FillHistos::Loop()
 {
   if (fChain == 0) return;
@@ -48,8 +47,7 @@ void FillHistos::Loop()
   Long64_t nentries = fChain->GetEntriesFast();
 
   Long64_t nbytes = 0, nb = 0;
-  //  for (Long64_t jentry=0; jentry<nentries;jentry++) {
-  for (Long64_t jentry=0; jentry<500000;jentry++) {
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -63,22 +61,23 @@ void FillHistos::Loop()
 
       int mc_truth = MCTruthMatch(iele);
 
-      if(mc_truth==2 || mc_truth==3){
-	// Fill histograms
-	hPt->Fill( (*elePt)[iele] );
-	hEta->Fill( (*eleSCEta)[iele] );
+      if(mc_truth != 1) continue;
+      //      if( !(mc_truth==2 || mc_truth==3) ) continue;
 
-	bool isBarrel = fabs( (*eleSCEta)[iele] ) < 1.479 ? true : false;
-	if( isBarrel ) {
-	  hSigmaIetaIeta_barrel->Fill((*eleSigmaIEtaIEta)[iele]);
-	}else{
-	  hSigmaIetaIeta_endcap->Fill((*eleSigmaIEtaIEta)[iele]);
-	}
+      // Fill histograms
+      hPt->Fill( (*elePt)[iele] );
+      hEta->Fill( (*eleSCEta)[iele] );
+
+      bool isBarrel = fabs( (*eleSCEta)[iele] ) < 1.479 ? true : false;
+      if( isBarrel ) {
+	hSigmaIetaIeta_barrel->Fill((*eleSigmaIEtaIEta)[iele]);
+      }else{
+	hSigmaIetaIeta_endcap->Fill((*eleSigmaIEtaIEta)[iele]);
       }
     } // end loop over for electrons
   } // loop over for events
   //  TFile* f1 = new TFile("hist_DYtoEE_matched.root", "recreate");
-  TFile* f1 = new TFile("hist_TTjets_matched.root", "recreate");
+  TFile* f1 = new TFile("hist_DY.root", "recreate");
   hPt->Write();
   hEta->Write();
   hSigmaIetaIeta_barrel->Write();

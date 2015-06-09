@@ -326,11 +326,10 @@ FillHistos::FillHistos(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-     //      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("DYToEE_M-50_Tune4C_13TeV-pythia8_skim.root");
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola.root");
+     //      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTree_TTjets.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("TTree_DY.root");
       if (!f || !f->IsOpen()) {
-	//         f = new TFile("DYToEE_M-50_Tune4C_13TeV-pythia8_skim.root");
-         f = new TFile("TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola.root");
+         f = new TFile("TTree_DY.root");
       }
       f->GetObject("EventTree",tree);
 
